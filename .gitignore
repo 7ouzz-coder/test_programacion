@@ -45,3 +45,4 @@ data/normalized.*
 
 # gitignore
 .gitignore
+backend/package-lock.json
