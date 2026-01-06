@@ -18,7 +18,7 @@ async function bootstrap() {
 
   console.log('');
   console.log('========================================');
-  console.log('✅ Servidor corriendo en: http://localhost:' + port);
+  console.log('Servidor funcionando en: http://localhost:' + port);
   console.log('========================================');
   console.log('');
   console.log('📋 Endpoints disponibles:');
