@@ -12,7 +12,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: any) {
     try {
-      console.log('body recibido:', body); // ver que llega
+      console.log('body recibido:', body);
       const result = await this.authService.register(
         body.email,
         body.password,
@@ -45,20 +45,15 @@ export class AuthController {
   @Get('me')
   async getProfile(@Headers('authorization') auth: string) {
     try {
-      // sacar el token
       if (!auth) {
         throw new Error('No hay token');
       }
 
       const token = auth.replace('Bearer ', '');
-      
-      // verificar token
       const decoded = this.jwtService.verify(token);
-      console.log('token decoded:', decoded); // debugging
+      console.log('token decoded:', decoded);
       
-      // traer usuario
       const user = await this.authService.getUserById(decoded.id);
-      
       return user;
     } catch (error) {
       console.error('error en me:', error);

@@ -13,11 +13,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // Registrar usuario
   async register(email: string, password: string) {
-    console.log('registrando usuario:', email); // debugging
+    console.log('registrando usuario:', email);
     
-    // verificar si existe
     const existingUser = await this.userRepository.findOne({ 
       where: { email } 
     });
@@ -26,20 +24,17 @@ export class AuthService {
       throw new Error('El email ya está registrado');
     }
 
-    // hashear password - uso 10 rounds porque lo vi en un tutorial
+    // hashear el password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('password encriptado'); 
+    console.log('password hasheado');
 
-    // crear usuario
     let user = new User();
     user.email = email;
     user.password = hashedPassword;
 
-    // guardar
     const savedUser = await this.userRepository.save(user);
     console.log('usuario guardado:', savedUser.id);
 
-    // generar token
     const token = this.jwtService.sign({ 
       id: savedUser.id, 
       email: savedUser.email 
@@ -54,11 +49,9 @@ export class AuthService {
     };
   }
 
-  // Login de usuario
   async login(email: string, password: string) {
     console.log('intentando login:', email);
     
-    // buscar usuario en la bd
     const usuario = await this.userRepository.findOne({ 
       where: { email } 
     });
@@ -67,7 +60,6 @@ export class AuthService {
       throw new Error('Usuario no encontrado');
     }
 
-    // comparar ci
     const isValid = await bcrypt.compare(password, usuario.password);
     console.log('password correcto?', isValid);
 
@@ -75,7 +67,6 @@ export class AuthService {
       throw new Error('Contraseña incorrecta');
     }
 
-    // crear token
     let token = this.jwtService.sign({ 
       id: usuario.id, 
       email: usuario.email 
@@ -90,7 +81,6 @@ export class AuthService {
     };
   }
 
-  // obtener info del usuario
   async getUserById(userId: number) {
     const user = await this.userRepository.findOne({ 
       where: { id: userId } 
